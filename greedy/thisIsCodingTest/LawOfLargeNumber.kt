@@ -7,7 +7,9 @@ class LawOfLargeNumber {
         val first = input[0]
         val second = input[1]
 
-        val result = (first * k + second) * (m / (k + 1)) + first * (m % (k + 1))
+        val firstAddedCount = (m / (k + 1) * k) + (m % (k + 1))
+
+        val result = first * firstAddedCount + second * (m - firstAddedCount)
         println(result)
     }
 }
