@@ -4,20 +4,23 @@ class Boj14659 {
         val hunters = readLine()!!.split(" ").map { it.toInt() }
 
         var result = 0
-        // O(N^2)
-        for(i in hunters.indices) {
-            var hunt = 0
-
-            for (j in i + 1 until hunters.size) {
-                if (hunters[i] < hunters[j]) {
-                    break
-                } else {
-                    hunt++
+        var currentHigherHunter = hunters[0]
+        var currentHigherHunterHunt = 0
+        // O(N)
+        for(i in 1 until n) {
+            if (hunters[i] < currentHigherHunter) {
+                currentHigherHunterHunt++
+            } else {
+                if (result < currentHigherHunterHunt) {
+                    result = currentHigherHunterHunt
                 }
+                currentHigherHunter = hunters[i]
+                currentHigherHunterHunt = 0
             }
-            if (result < hunt) {
-                result = hunt
-            }
+        }
+
+        if (result < currentHigherHunterHunt) {
+            result = currentHigherHunterHunt
         }
 
         println(result)
