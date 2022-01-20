@@ -1,0 +1,25 @@
+class Boj14659 {
+    fun solution() {
+        val n = readLine()!!.toInt()
+        val hunters = readLine()!!.split(" ").map { it.toInt() }
+
+        var result = 0
+        // O(N^2)
+        for(i in hunters.indices) {
+            var hunt = 0
+
+            for (j in i + 1 until hunters.size) {
+                if (hunters[i] < hunters[j]) {
+                    break
+                } else {
+                    hunt++
+                }
+            }
+            if (result < hunt) {
+                result = hunt
+            }
+        }
+
+        println(result)
+    }
+}
