@@ -1,9 +1,9 @@
 import kotlin.math.min
 
 class Boj20044 {
-    fun solution() {
-        val n = readLine()!!.toInt()
-        val wList = readLine()!!.split(" ").map { it.toInt() }.toMutableList()
+    fun solution() = with (System.`in`.bufferedReader()) {
+        val n = readLine().toInt()
+        val wList = readLine().split(" ").map { it.toInt() }.toMutableList()
 
         wList.sort()
         var result = wList[0] + wList[wList.lastIndex]

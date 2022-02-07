@@ -1,7 +1,7 @@
 class LawOfLargeNumber {
-    fun solution() {
-        val (n, m, k) = readLine()!!.split(" ").map { it.toInt() }
-        val input = readLine()!!.split(" ").map { it.toInt() }.toMutableList()
+    fun solution() = with (System.`in`.bufferedReader()) {
+        val (n, m, k) = readLine().split(" ").map { it.toInt() }
+        val input = readLine().split(" ").map { it.toInt() }.toMutableList()
 
         input.sortDescending()
         val first = input[0]

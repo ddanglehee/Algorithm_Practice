@@ -1,10 +1,10 @@
 object Boj1931 {
 
-    fun solution() {
-        val n = readLine()!!.toInt()
+    fun solution() = with (System.`in`.bufferedReader()) {
+        val n = readLine().toInt()
         val meetingList = mutableListOf<Pair<Int, Int>>()
         for (i in 0 until n) {
-            val tmp = readLine()!!.split(" ").map { it.toInt() }
+            val tmp = readLine().split(" ").map { it.toInt() }
             meetingList.add(Pair(tmp[0], tmp[1]))
         }
 

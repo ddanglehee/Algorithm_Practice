@@ -1,7 +1,7 @@
 class Boj14659 {
-    fun solution() {
-        val n = readLine()!!.toInt()
-        val hunters = readLine()!!.split(" ").map { it.toInt() }
+    fun solution() = with (System.`in`.bufferedReader()) {
+        val n = readLine().toInt()
+        val hunters = readLine().split(" ").map { it.toInt() }
 
         var result = 0
         var currentHigherHunter = hunters[0]

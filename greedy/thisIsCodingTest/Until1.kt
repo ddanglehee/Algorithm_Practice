@@ -1,6 +1,6 @@
 class Until1 {
-    fun solution() {
-        var (n, k) = readLine()!!.split(" ").map{ it.toInt() }
+    fun solution() = with (System.`in`.bufferedReader()) {
+        var (n, k) = readLine().split(" ").map{ it.toInt() }
 
         var result = 0
 

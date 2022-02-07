@@ -1,10 +1,10 @@
 class Boj2847 {
-    fun solution() {
-        val n = readLine()!!.toInt()
+    fun solution() = with (System.`in`.bufferedReader()) {
+        val n = readLine().toInt()
         val scores = mutableListOf<Int>()
 
         for (i in 0 until n) {
-            val score = readLine()!!.toInt()
+            val score = readLine().toInt()
             scores.add(score)
         }
 
