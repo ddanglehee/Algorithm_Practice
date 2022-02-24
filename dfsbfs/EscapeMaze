@@ -1,0 +1,38 @@
+import java.util.*
+
+class EscapeMaze {
+    fun solution() {
+        val br = System.`in`.bufferedReader()
+        val (n, m) = br.readLine().split(" ").map { it.toInt() }
+        val maze = MutableList(n) {
+            br.readLine().split("").subList(1, m + 1).map{ it.toInt() }.toMutableList()
+        }
+
+        val start = Pair(0, 0)
+        val queue = LinkedList<Pair<Int, Int>>()
+        queue.offer(start)
+
+        var result = 0
+        val directions = listOf(Pair(0, -1), Pair(0, 1), Pair(-1, 0), Pair(1, 0))
+        while (queue.isNotEmpty()) {
+            val current = queue.poll()
+            result++
+            if (current.first == n - 1 && current.second == m - 1) {
+                result = maze[current.first][current.second]
+                break
+            }
+
+            for (d in directions) {
+                val row = current.first + d.first
+                val column = current.second + d.second
+                if (row !in 0 until n || column !in 0 until m) continue
+                if (maze[row][column] == 1) {
+                    queue.offer(Pair(row, column))
+                    maze[row][column] = maze[current.first][current.second] + 1
+                }
+            }
+        }
+
+        println(result)
+    }
+}
