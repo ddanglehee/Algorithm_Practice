@@ -1,0 +1,32 @@
+class FindParts {
+    fun solution() {
+        val br = System.`in`.bufferedReader()
+        val n = br.readLine().toInt()
+        val storeParts = br.readLine().split(" ").map { it.toInt() }.toMutableList()
+        val m = br.readLine().toInt()
+        val customerRequest = br.readLine().split(" ").map { it.toInt() }
+
+        storeParts.sort()
+
+        customerRequest.forEach { parts ->
+            print("${isPartsInStore(storeParts, parts)} ")
+        }
+    }
+
+    fun isPartsInStore(list: List<Int>, target: Int): String {
+        var start = 0
+        var end = list.lastIndex
+
+        while (start <= end) {
+            val mid = (start + end) / 2
+
+            when {
+                target < list[mid] -> end = mid - 1
+                target == list[mid] -> return "yes"
+                else -> start = mid + 1
+            }
+        }
+
+        return "no"
+    }
+}
