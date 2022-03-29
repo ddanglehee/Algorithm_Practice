@@ -1,5 +1,5 @@
 class FindParts {
-    fun solution() {
+    fun solution1() {
         val br = System.`in`.bufferedReader()
         val n = br.readLine().toInt()
         val storeParts = br.readLine().split(" ").map { it.toInt() }.toMutableList()
@@ -10,6 +10,42 @@ class FindParts {
 
         customerRequest.forEach { parts ->
             print("${isPartsInStore(storeParts, parts)} ")
+        }
+    }
+
+    // 집합 자료형 사용 풀이
+    fun solution2() {
+        val br = System.`in`.bufferedReader()
+        val n = br.readLine().toInt()
+        val storeParts = br.readLine().split(" ").map { it.toInt() }.toSet()
+        val m = br.readLine().toInt()
+        val customerRequest = br.readLine().split(" ").map { it.toInt() }
+
+        customerRequest.forEach { parts ->
+            if (parts in storeParts) {
+                print("yes ")
+            } else {
+                print("no ")
+            }
+        }
+    }
+
+    // 계수 정렬 사용 풀이
+    fun solution3() {
+        val partsList = MutableList(1000001) { 0 }
+
+        val br = System.`in`.bufferedReader()
+        val n = br.readLine().toInt()
+        val storeParts = br.readLine().split(" ").map { it.toInt() }.forEach { partsList[it]++ }
+        val m = br.readLine().toInt()
+        val customerRequest = br.readLine().split(" ").map { it.toInt() }
+
+        customerRequest.forEach {
+            if (partsList[it] == 1) {
+                print("yes ")
+            } else {
+                print("no ")
+            }
         }
     }
 
