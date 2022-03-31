@@ -9,17 +9,12 @@ class EfficientMoneyComposition {
             moneyList.add(br.readLine().toInt())
         }
 
-        val dpTable = Array(m + 1) { 10001 }
-        moneyList.forEach { unit ->
-            if (unit <= m) {
-                dpTable[unit] = 1
-            }
-        }
+        val dpTable = Array(10001) { 10001 }
 
-        val start = moneyList.minOrNull()!!
-        for (i in start + 1..m) {
-            moneyList.forEach { unit ->
-                if (0 < i - unit && dpTable[i - unit] != 10001) {
+        moneyList.forEach { unit ->
+            dpTable[unit] = 1
+            for (i in unit + 1..m) {
+                if (dpTable[i - unit] != 10001) {
                     dpTable[i] = min(dpTable[i], dpTable[i - unit] + 1)
                 }
             }
