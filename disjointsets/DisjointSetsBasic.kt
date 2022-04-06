@@ -33,12 +33,11 @@ class DisjointSetsBasic {
         }
     }
 
-
+    // 경로 압축 기법 소스코드
     private fun findParent(a: Int): Int {
-        return if (parentTable[a] == a) {
-            a
-        } else {
-            findParent(parentTable[a])
+        if (parentTable[a] != a) {
+            parentTable[a] = findParent(parentTable[a])
         }
+        return parentTable[a]
     }
 }
