@@ -5,17 +5,16 @@ class LuckyStraight {
         val left = number.substring(0 until number.length / 2 )
         val right = number.substring(number.length / 2 until number.length)
 
-        var leftSum = 0
+        var sum = 0
         left.forEach {
-            leftSum += it.digitToInt()
+            sum += it.digitToInt()
         }
 
-        var rightSum = 0
         right.forEach {
-            rightSum += it.digitToInt()
+            sum -= it.digitToInt()
         }
 
-        if (rightSum == leftSum) {
+        if (sum == 0) {
             println("LUCKY")
         } else {
             println("READY")
