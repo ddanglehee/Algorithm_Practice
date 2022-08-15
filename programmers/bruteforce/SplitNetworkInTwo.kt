@@ -1,0 +1,51 @@
+import kotlin.math.absoluteValue
+
+class SplitNetworkInTwo {
+    private var answer: Int = 100
+
+    fun solution(n: Int, wires: Array<IntArray>): Int {
+        val tree = Array(n + 1) {
+            mutableListOf<Int>()
+        }
+
+        // 1. 트리 구성
+        wires.forEach { wire ->
+            val v1 = wire[0]
+            val v2 = wire[1]
+
+            tree[v1].add(v2)
+            tree[v2].add(v1)
+        }
+
+        // 2. wires를 순회하면서 해당 wire를 제거했을 때 나뉜 두 전력망이 가지고 있는 송전탑 개수의 차이
+        wires.forEach { wire ->
+            val network1 = towerCount(wire[0], wire[1], tree, BooleanArray(n + 1))
+            val network2 = towerCount(wire[1], wire[0], tree, BooleanArray(n + 1))
+
+            answer = answer.coerceAtMost((network1 - network2).absoluteValue)
+        }
+
+        return answer
+    }
+
+    fun towerCount(v1: Int, v2: Int, tree: Array<MutableList<Int>>, visited: BooleanArray): Int {
+        var count = 1
+        val queue = ArrayDeque<Int>()
+        visited[v1] = true
+        queue.add(v1)
+
+        while (queue.isNotEmpty()) {
+            val current = queue.removeFirst()
+
+            tree[current].forEach { next ->
+                if (!visited[next] && next != v2) {
+                    count++
+                    visited[next] = true
+                    queue.add(next)
+                }
+            }
+        }
+
+        return count
+    }
+}
