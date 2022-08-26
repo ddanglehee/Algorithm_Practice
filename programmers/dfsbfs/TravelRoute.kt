@@ -1,37 +1,32 @@
 class TravelRoute {
 
-
     private val tmp = mutableListOf<String>()
     private val answer = mutableListOf<String>()
 
     fun solution(tickets: Array<Array<String>>): Array<String> {
-        val route = hashMapOf<String, MutableList<String>>()
-        val visited = hashMapOf<String, Int>()
+        val route = hashMapOf<String, MutableList<Ticket>>()
 
         tickets.forEach { ticket ->
             val from = ticket[0]
             val to = ticket[1]
 
             if (route[from] == null) {
-                route[from] = mutableListOf(to)
+                route[from] = mutableListOf(Ticket(to))
             } else {
-                route[from]!!.add(to)
+                route[from]!!.add(Ticket(to))
             }
-            visited[to] = (visited[to] ?: 0) + 1
         }
 
         route.keys.forEach { key ->
-            route[key]!!.sort()
+            route[key]!!.sortBy { it.to }
         }
 
-        visited["ICN"] = (visited["ICN"] ?: 0) + 1
-        dfs("ICN", route, visited, tickets.size + 1)
+        dfs("ICN", route, tickets.size + 1)
 
         return answer.toTypedArray()
     }
 
-    private fun dfs(current: String, route: HashMap<String, MutableList<String>>, visited: HashMap<String, Int>, size: Int): Boolean {
-        visited[current] = (visited[current] ?: 0) - 1
+    private fun dfs(current: String, route: HashMap<String, MutableList<Ticket>>, size: Int): Boolean {
         tmp.add(current)
 
         if (tmp.size == size) {
@@ -40,17 +35,20 @@ class TravelRoute {
         }
 
 
-        route[current]?.forEach { next ->
-            if (visited[next] != 0) {
-                if(dfs(next, route, visited, size)) {
+        route[current]?.forEach { ticket ->
+            if (!ticket.isUsed) {
+                ticket.isUsed = true
+                if(dfs(ticket.to, route, size)) {
                     return true
                 }
+                ticket.isUsed = false
             }
         }
 
-
-        visited[current] = (visited[current] ?: 0) + 1
         tmp.removeLast()
         return false
+    }
+
+    data class Ticket(val to: String, var isUsed: Boolean = false) {
     }
 }
