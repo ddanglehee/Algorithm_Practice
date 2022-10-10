@@ -19,9 +19,8 @@ class Boj3085 {
                     val changeX = j + dx[d]
 
                     if (changeY in 0 until n && changeX in 0 until n) {
-                        if (candies[i][i] == candies[changeY][changeX]) continue
                         swap(candies, i, j, changeY, changeX)
-                        result = maxOf(result, countCandy(candies))
+                        result = maxOf(result, countCandy(candies, i, j))
                         swap(candies, changeY, changeX, i, j)
                     }
                 }
@@ -37,32 +36,27 @@ class Boj3085 {
         candies[k][l] = tmp
     }
 
-    fun countCandy(candies: Array<CharArray>): Int {
+    fun countCandy(candies: Array<CharArray>, i: Int, j: Int): Int {
         var iMax = 1
         var jMax = 1
 
-
-        for (i in candies.indices) {
-            var count = 1
-            for (j in 1 until candies.size) {
-                if (candies[i][j] == candies[i][j - 1]) {
-                    count++
-                    iMax = maxOf(iMax, count)
-                } else {
-                    count = 1
-                }
+        var count = 1
+        for (k in 1 until candies.size) {
+            if (candies[i][k] == candies[i][k - 1]) {
+                count++
+                iMax = maxOf(iMax, count)
+            } else {
+                count = 1
             }
         }
 
-        for (j in candies.indices) {
-            var count = 1
-            for (i in 1 until candies.size) {
-                if (candies[i][j] == candies[i - 1][j]) {
-                    count++
-                    iMax = maxOf(iMax, count)
-                } else {
-                    count = 1
-                }
+        count = 1
+        for (l in 1 until candies.size) {
+            if (candies[l][j] == candies[l - 1][j]) {
+                count++
+                jMax = maxOf(jMax, count)
+            } else {
+                count = 1
             }
         }
 
