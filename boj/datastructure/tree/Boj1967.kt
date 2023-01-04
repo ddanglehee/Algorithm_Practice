@@ -1,46 +1,35 @@
 class Boj1967 {
 
     var diameter = 0
+    var node = 1
 
     fun main() = with(System.`in`.bufferedReader()) {
         val n = readLine().toInt()
-        val tree = Array(n + 1) { mutableListOf<Pair<Int, Int>>() }
-        val isLeafNode = BooleanArray(n + 1) { true }
 
-        var rootChildrenCount = 0
+        val tree = Array(n + 1) { mutableListOf<Pair<Int, Int>>() }
         repeat(n - 1) {
             val (parent, child, weight) = readLine().split(" ").map { it.toInt() }
-            if (parent == 1) {
-                rootChildrenCount++
-            }
-            isLeafNode[parent] = false
 
             tree[parent].add(child to weight)
             tree[child].add(parent to weight)
         }
 
-        if (rootChildrenCount == 1) {
-            isLeafNode[1] = true
-        }
-        for (start in 1..n) {
-            if (!isLeafNode[start]) continue
-
-            calculateDiameter(tree, -1, start, 0, isLeafNode)
-        }
+        findFarthestNode(tree, -1, 1, 0)
+        findFarthestNode(tree, -1, node, 0)
 
         println(diameter)
     }
 
-    fun calculateDiameter(tree: Array<MutableList<Pair<Int, Int>>>, pre: Int,  current: Int, tmpDiameter: Int, isLeafNode: BooleanArray) {
-        if (pre != -1 && isLeafNode[current]) {
-            diameter = maxOf(diameter, tmpDiameter)
-            return
+    fun findFarthestNode(tree: Array<MutableList<Pair<Int, Int>>>, pre: Int, current: Int, tmpDiameter: Int) {
+        if (diameter < tmpDiameter) {
+            diameter = tmpDiameter
+            node = current
         }
 
         for (next in tree[current]) {
-            if (pre == next.first) continue
-
-            calculateDiameter(tree, current, next.first, tmpDiameter + next.second, isLeafNode)
+            if (next.first != pre) {
+                findFarthestNode(tree, current, next.first, tmpDiameter + next.second)
+            }
         }
     }
 }
