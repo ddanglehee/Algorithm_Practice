@@ -28,4 +28,17 @@ class PasswordOfTwo {
 
         return currentChar
     }
+
+    // 더 효율이 좋고 간단한 풀이
+    fun solution2(s: String, skip: String, index: Int): String {
+        var answer: String = ""
+        val alphabet = ('a'..'z').filter { it !in skip }
+
+        s.forEach { c ->
+            val newIndex = (alphabet.indexOf(c) + index) % alphabet.size
+            answer += alphabet[newIndex]
+        }
+
+        return answer
+    }
 }
