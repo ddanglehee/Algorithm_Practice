@@ -3,144 +3,131 @@ import java.io.*;
 
 public class Solution {
 
-    static int answer;
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-    static StringBuilder sb = new StringBuilder();
     static StringTokenizer st;
-    static int N, W, H;
-    static int[][] graph = new int[12][15];
-    static ArrayList<Integer[]> dupPermutations = new ArrayList<>();
-    static int[] dw = {-1, 0, 1, 0};
-    static int[] dh = {0, -1, 0, 1};
-    static int totalBrick = 0;
+    static StringBuilder sb = new StringBuilder();
+    static int N, R, C;
+    static int[][] graph = new int[15][12];
+    static int[][] clonedGraph = new int[15][12];
     static ArrayDeque<int[]> queue = new ArrayDeque<>();
-    static boolean[][] broken = new boolean[12][15];
+    static int[] shoot = new int[4];
+    static int[] dr = {0, 0, -1, 1};
+    static int[] dc = {-1, 1, 0, 0};
 
     public static void main(String[] args) throws IOException {
         int T = Integer.parseInt(br.readLine());
 
+        int answer;
         for (int test_case = 1; test_case <= T; test_case++) {
             init();
+            answer = Integer.MAX_VALUE;
 
-            for (Integer[] dupPermutation: dupPermutations) {
-                LinkedList<Integer>[] curGraph = cloneGraph();
+            for (int s3 = 0; s3 < C; s3++) {
+                shoot[3] = s3;
 
-                int totalBroken = 0;
-                for (Integer w: dupPermutation) { // w: 현재 구슬 쏘는 가로 index
-                    if (curGraph[w].size() == 0) break;
-                    totalBroken += shoot(curGraph, w, curGraph[w].size() - 1);
+                for (int s2 = 0; s2 < C; s2++) {
+                    shoot[2] = s2;
+
+                    for (int s1 = 0; s1 < C; s1++) {
+                        shoot[1] = s1;
+
+                        for (int s0 = 0; s0 < C; s0++) {
+                            shoot[0] = s0;
+                            cloneGraph(graph, clonedGraph);
+
+                            for (int i = 0; i < N; i++) {
+                                shootAt(shoot[i]);
+                                downBricks();
+
+                            }
+
+                            answer = Math.min(answer, countRemainBricks());
+                            cloneGraph(clonedGraph, graph);
+
+                        }
+
+                        if (N < 2) break;
+                    }
+                    if (N < 3) break;
                 }
-
-                answer = Math.min(answer, totalBrick - totalBroken);
+                if (N < 4) break;
             }
 
             sb.append("#").append(test_case).append(" ").append(answer).append("\n");
         }
-
         System.out.print(sb);
     }
 
-    static LinkedList<Integer>[] cloneGraph() {
-        LinkedList<Integer>[] newGraph = new LinkedList[12];
-        for (int i = 0; i < 12; i++) {
-            newGraph[i] = new LinkedList<>();
-        }
+    static void shootAt(int c) {
+        queue.clear();
+        for (int i = R - 1; 0 <= i; i--) {
+            if (graph[i][c] == 0) continue;
+            queue.offer(new int[] {graph[i][c], i, c});
+            graph[i][c] = 0;
 
-        for (int i = 0; i < W; i++) {
-            for (int j = 0; j < H; j++) {
-                if (graph[i][j] != 0) {
-                    newGraph[i].add(graph[i][j]);
+            while (!queue.isEmpty()) {
+                int[] cur = queue.poll();
+                for (int d = 0; d < 4; d++) {
+                    for (int l = 1; l < cur[0]; l++) {
+                        int nR = cur[1] + dr[d] * l;
+                        int nC = cur[2] + dc[d] * l;
+                        if (nR < 0 || R <= nR || nC < 0 || C <= nC) continue;
+                        if (graph[nR][nC] > 1) queue.offer(new int[] {graph[nR][nC], nR, nC});
+                        graph[nR][nC] = 0;
+                    }
                 }
             }
-        }
-//
-//		for (LinkedList<Integer> a: newGraph) {
-//			for (Integer k: a) {
-//				System.out.print(k + " ");
-//			}
-//			System.out.println();
-//		}
 
-        return newGraph;
+            break;
+        }
     }
 
-    public static int shoot(LinkedList<Integer>[] curGraph, int w, int h) {
-        for (int i = 0; i < W; i++) {
-            for (int j = 0; j < H; j++) {
-                broken[i][j] = false;
-            }
-        }
-        queue.clear();
-        queue.offer(new int[] {w, h});
+    static void downBricks() {
+        for (int j = 0; j < C; j++) {
+            for (int i = 0; i < R; i++) {
+                if (graph[i][j] != 0) continue;
 
-        while (!queue.isEmpty()) {
-            int[] cur = queue.poll(); int curW = cur[0]; int curH = cur[1];
-            broken[cur[0]][cur[1]] = true;
-            int number = curGraph[curW].get(curH);
-            if (number == 1) continue;
-
-            for (int d = 0; d < 4; d++) {
-                for (int i = 1; i < number; i++) {
-                    int nW = curW + dw[d] * i; int nH = curH + dh[d] * i;
-                    if (nW < 0 || W <= nW || nH < 0 || curGraph[nW].size() <= nH || broken[nW][nH]) continue;
-                    queue.offer(new int[] {nW, nH});
+                for (int k = i + 1; k < R; k++) {
+                    if (graph[k][j] != 0) {
+                        graph[i][j] = graph[k][j];
+                        graph[k][j] = 0;
+                        break;
+                    }
                 }
             }
         }
+    }
 
-        int brokenCount = 0;
-        for (int i = 0; i < W; i++) {
-            for (int j = H - 1; 0 <= j; j--) {
-                if (broken[i][j]) {
-                    brokenCount++;
-                    curGraph[i].remove(j);
-                }
+    static int countRemainBricks() {
+        int bricks = 0;
+
+        for (int i = 0; i < R; i++) {
+            for (int j = 0; j < C; j++) {
+                if (graph[i][j] != 0) bricks++;
             }
         }
 
-        return brokenCount;
+        return bricks;
+    }
+
+    static void cloneGraph(int[][] from, int[][] to) {
+        for (int i = 0; i < R; i++) {
+            for (int j = 0; j < C; j++) {
+                to[i][j] = from[i][j];
+            }
+        }
     }
 
     static void init() throws IOException {
-        totalBrick = 0;
-        clearGraph(); dupPermutations.clear();
         st = new StringTokenizer(br.readLine());
         N = Integer.parseInt(st.nextToken());
-        W = Integer.parseInt(st.nextToken());
-        H = Integer.parseInt(st.nextToken());
+        C = Integer.parseInt(st.nextToken());
+        R = Integer.parseInt(st.nextToken());
 
-        duplicatePermutations(new ArrayList<>());
-        for (int h = H - 1; 0 <= h; h--) {
+        for (int i = R - 1; 0 <= i; i--) {
             st = new StringTokenizer(br.readLine());
-
-            for (int w = 0; w < W; w++) {
-                int brick = Integer.parseInt(st.nextToken());
-                if (brick != 0) {
-                    totalBrick++;
-                    graph[w][h] = brick;
-                }
-            }
-        }
-
-        answer = totalBrick;
-    }
-
-    static void duplicatePermutations(ArrayList<Integer> tmp) {
-        if (tmp.size() == N) {
-            dupPermutations.add(tmp.toArray(new Integer[N]));
-            return;
-        }
-        for (int w = 0; w < W; w++) {
-            tmp.add(w);
-            duplicatePermutations(tmp);
-            tmp.remove(tmp.size() - 1);
-        }
-    }
-
-    static void clearGraph() {
-        for (int i = 0; i < 12; i++) {
-            for (int j = 0; j < 15; j++) {
-                graph[i][j] = 0;
+            for (int j = 0; j < C; j++) {
+                graph[i][j] = Integer.parseInt(st.nextToken());
             }
         }
     }
