@@ -55,3 +55,50 @@ class Solution {
         used = BooleanArray(n + 1)
     }
 }
+
+import java.util.PriorityQueue
+
+class Solution {
+
+    val max = 987654321
+    lateinit var dist: Array<IntArray>
+
+    fun solution(n: Int, s: Int, a: Int, b: Int, fares: Array<IntArray>): Int {
+        var answer: Int = max
+
+        init(n, fares)
+
+        floydWarshall(n)
+        for (i in 1..n) {
+            val d = dist[s][i] + dist[i][a] + dist[i][b]
+            if (d < 0) continue
+            answer = minOf(answer, d)
+        }
+
+        return answer
+    }
+
+    fun floydWarshall(n: Int) {
+        for (k in 1..n) {
+            for (i in 1..n) {
+                for (j in 1..n) {
+                    if (dist[i][k] + dist[j][j] < 0) continue
+                    dist[i][j] = minOf(dist[i][j], dist[i][k] + dist[k][j])
+                }
+            }
+        }
+    }
+
+    fun init(n: Int, fares: Array<IntArray>) {
+        dist = Array(n + 1) { IntArray(n + 1) { max } }
+
+        for (i in 1..n) {
+            dist[i][i] = 0
+        }
+
+        fares.forEach { (a, b, c) ->
+            dist[a][b] = c
+            dist[b][a] = c
+        }
+    }
+}
