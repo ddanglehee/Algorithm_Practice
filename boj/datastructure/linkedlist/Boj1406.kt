@@ -2,6 +2,42 @@ import java.util.LinkedList
 
 class Boj1406 {
 
+    // 정답코드
+    fun main() = with(System.`in`.bufferedReader()) {
+        val input = readLine()
+
+        val m = readLine().toInt()
+        val list = LinkedList<Char>()
+        for (c in input) {
+            list.add(c)
+        }
+
+        val iter = list.listIterator(list.size)
+        repeat(m) {
+            val cmd = readLine()
+            when (cmd) {
+                "L" -> {
+                    if (iter.hasPrevious()) iter.previous()
+                }
+                "D" -> {
+                    if (iter.hasNext()) iter.next()
+                }
+                "B" -> {
+                    if (iter.hasPrevious()) {
+                        iter.previous()
+                        iter.remove()
+                    }
+                }
+                else -> {
+                    iter.add(cmd[2])
+                }
+            }
+        }
+
+        print(list.joinToString(""))
+    }
+
+    // 시간초과 코드 (비교해보세요~~)
     fun main() = with(System.`in`.bufferedReader()) {
         val input = readLine()
         val m = readLine().toInt()
