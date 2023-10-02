@@ -1,0 +1,5 @@
+select info.REST_ID, info.REST_NAME, info.FOOD_TYPE, info.FAVORITES, info.ADDRESS, ROUND(AVG(review.REVIEW_SCORE), 2) as SCORE
+from REST_INFO as info join REST_REVIEW as review using(REST_ID)
+where LEFT(info.ADDRESS, 2) = "서울"
+group by info.REST_ID
+order by SCORE desc, info.FAVORITES desc
