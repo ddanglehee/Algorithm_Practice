@@ -1,0 +1,10 @@
+select AUTHOR_ID, AUTHOR_NAME, CATEGORY, SUM(PRICE * SALES) as TOTAL_SALES
+from (
+    (select BOOK_ID, SALES
+    from BOOK_SALES
+    where LEFT(SALES_DATE, 7) = '2022-01') as a
+    join BOOK using(BOOK_ID)
+    join AUTHOR using(AUTHOR_ID)
+)
+group by AUTHOR_ID, CATEGORY
+order by AUTHOR_ID, CATEGORY desc
