@@ -1,0 +1,4 @@
+select a.CATEGORY, SUM(SALES) as TOTAL_SALES
+from BOOK a join BOOK_SALES b using BOOK_ID
+group by a.CATEGORY
+order by a.CATEGORY
