@@ -1,0 +1,4 @@
+select distinct s1.USER_ID, s1.PRODUCT_ID
+from ONLINE_SALE s1 join ONLINE_SALE s2 on s1.USER_ID = s2.USER_ID and s1.PRODUCT_ID = s2.PRODUCT_ID
+where s1.SALES_DATE != s2.SALES_DATE
+order by s1.USER_ID, s1.PRODUCT_ID desc
