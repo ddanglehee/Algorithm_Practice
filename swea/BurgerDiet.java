@@ -1,0 +1,54 @@
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.StringTokenizer;
+import java.util.stream.Collectors;
+import java.io.*;
+
+
+class Solution
+{
+
+    private static int N, L;
+    private static int[] t = new int[20];
+    private static int[] k = new int[20];
+    private static int answer = 0;
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int T = Integer.parseInt(br.readLine());
+
+        StringTokenizer st;
+        StringBuilder sb = new StringBuilder();
+        for (int test_case = 1; test_case <= T; test_case++) {
+            answer = 0;
+
+            st = new StringTokenizer(br.readLine());
+            N = Integer.parseInt(st.nextToken());
+            L = Integer.parseInt(st.nextToken());
+
+            for (int i = 0; i < N; i++) {
+                st = new StringTokenizer(br.readLine());
+                t[i] = Integer.parseInt(st.nextToken());
+                k[i] = Integer.parseInt(st.nextToken());
+            }
+
+            solution(0, 0, 0);
+
+            sb.append("#").append(test_case).append(" ").append(answer).append("\n");
+        }
+        System.out.print(sb);
+
+    }
+
+    private static void solution(int index, int totalT, int totalK) {
+        if (L < totalK) return;
+
+        if (index == N) {
+            answer = Math.max(answer, totalT);
+            return;
+        }
+
+        solution(index + 1, totalT, totalK); // 이 햄버거를 안 먹는 경우
+        solution(index + 1, totalT + t[index], totalK + k[index]); // 이 햄버거를 먹는 경우
+    }
+}
