@@ -4,7 +4,7 @@ import java.util.*;
 public class Solution {
 
     static int N, M, a, b;
-    static Set<Integer> mismatchSet = new HashSet<>();
+    static int[] mismatch = new int[20];
     static int answer = 0;
 
     public static void main(String[] args) throws IOException {
@@ -19,23 +19,26 @@ public class Solution {
             M = Integer.parseInt(st.nextToken());
 
             answer = 0;
-            mismatchSet.clear();
+            for (int i = 0; i < N; i++) {
+                mismatch[i] = 0;
+            }
             for (int i = 0; i < M; i++) {
                 st = new StringTokenizer(br.readLine());
-                a = 1 << Integer.parseInt(st.nextToken());
-                b = 1 << Integer.parseInt(st.nextToken());
+                a = Integer.parseInt(st.nextToken()) - 1;
+                b = Integer.parseInt(st.nextToken()) - 1;
 
-                mismatchSet.add(a | b);
+                mismatch[a] |= (1 << b);
+                mismatch[b] |= (1 << a);
             }
 
-            makeNewBurger(1, 0);
+            makeNewBurger(0, 0);
             sb.append("#").append(t).append(" ").append(answer).append("\n");
         }
         System.out.print(sb);
     }
 
     static void makeNewBurger(int index, int newBurger) {
-        if (index == N + 1) {
+        if (index == N) {
             answer++;
             return;
         }
@@ -43,11 +46,9 @@ public class Solution {
         // 이 재료 선택 안하는 경우
         makeNewBurger(index + 1, newBurger);
 
-        // 이 재료 선택할 수 있는지 확인
-        newBurger |= (1 << index);
-        for (int mismatch : mismatchSet) {
-            if ((mismatch & newBurger) == mismatch) return;
+        // 이 재료 선택하는 경우
+        if ((newBurger & mismatch[index]) == 0) {
+            makeNewBurger(index + 1, newBurger | (1 << index));
         }
-        makeNewBurger(index + 1, newBurger);
     }
 }
