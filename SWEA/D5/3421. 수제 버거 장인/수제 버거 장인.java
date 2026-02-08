@@ -1,20 +1,15 @@
-import java.util.*;
 import java.io.*;
+import java.util.*;
 
 public class Solution {
 
-    static int N, M;
-    static Set<Integer>[] mismatchSet = new HashSet[21];
-    static int[] ab = new int[2];
-    static boolean[] canPut = new boolean[21];
+    static int N, M, a, b;
+    static Set<Integer> mismatchSet = new HashSet<>();
     static int answer = 0;
 
-    public static void main(String[] args) throws IOException{
+    public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         int T =  Integer.parseInt(br.readLine());
-        for (int i = 1; i <= 20; i++) {
-            mismatchSet[i] = new HashSet<>();
-        }
 
         StringBuilder sb = new StringBuilder();
         StringTokenizer st;
@@ -23,53 +18,36 @@ public class Solution {
             N = Integer.parseInt(st.nextToken());
             M = Integer.parseInt(st.nextToken());
 
-            init();
+            answer = 0;
+            mismatchSet.clear();
             for (int i = 0; i < M; i++) {
                 st = new StringTokenizer(br.readLine());
-                ab[0] = Integer.parseInt(st.nextToken());
-                ab[1] = Integer.parseInt(st.nextToken());
-                Arrays.sort(ab);
+                a = 1 << Integer.parseInt(st.nextToken());
+                b = 1 << Integer.parseInt(st.nextToken());
 
-                mismatchSet[ab[0]].add(ab[1]);
+                mismatchSet.add(a | b);
             }
 
-            makeNewBurger(1, canPut);
+            makeNewBurger(1, 0);
             sb.append("#").append(t).append(" ").append(answer).append("\n");
         }
         System.out.print(sb);
     }
 
-    static void makeNewBurger(int index, boolean[] canPut) {
+    static void makeNewBurger(int index, int newBurger) {
         if (index == N + 1) {
             answer++;
             return;
         }
 
-        // 이 재료를 포함시키는 경우
-        if (canPut[index]) {
+        // 이 재료 선택 안하는 경우
+        makeNewBurger(index + 1, newBurger);
 
-            List<Integer> mismatchWithThis = new ArrayList<>(); // 이 재료를 넣었을 때 궁합 안 맞는 재료를 담는 리스트 (복원용)
-            for (int i : mismatchSet[index]) {
-                if (canPut[i]) {
-                    mismatchWithThis.add(i);
-                    canPut[i] = false;
-                }
-            }
-            makeNewBurger(index + 1, canPut);
-            for (int i : mismatchWithThis) {
-                canPut[i] = true;
-            }
+        // 이 재료 선택할 수 있는지 확인
+        newBurger |= (1 << index);
+        for (int mismatch : mismatchSet) {
+            if ((mismatch & newBurger) == mismatch) return;
         }
-
-        // 이 재료를 포함시키지 않는 경우
-        makeNewBurger(index + 1, canPut);
-    }
-
-    static void init() {
-        answer = 0;
-        for (int i = 1; i <= N; i++) {
-            mismatchSet[i].clear();
-            canPut[i] = true;
-        }
+        makeNewBurger(index + 1, newBurger);
     }
 }
