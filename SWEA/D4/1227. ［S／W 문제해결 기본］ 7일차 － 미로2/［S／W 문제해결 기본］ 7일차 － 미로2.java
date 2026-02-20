@@ -1,5 +1,5 @@
 import java.io.*;
-import java.util.Arrays;
+import java.util.*;
 
 public class Solution {
 	
@@ -8,6 +8,7 @@ public class Solution {
 	static int sR, sC;
 	static int[] dr = {1, 0, -1, 0};
 	static int[] dc = {0, 1, 0, -1};
+	static Queue<Point> queue = new ArrayDeque<>();
 	
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -27,24 +28,42 @@ public class Solution {
 				}
 			}
 			
-			sb.append("#").append(t).append(" ").append(dfs(sR, sC, t)).append("\n");
+			sb.append("#").append(t).append(" ").append(bfs(sR, sC, t)).append("\n");
 		}
 		
 		System.out.print(sb);
 	}
 	
-	static int dfs(int r, int c, int t) {
+	static int bfs(int r, int c, int t) {
+		queue.clear();
+		queue.add(new Point(r, c));
 		visited[r][c] = t;
 		
-		for (int d = 0; d < 4; d++) {
-			int nR = r + dr[d];
-			int nC = c + dc[d];
+		while (!queue.isEmpty()) {
+			Point cur = queue.poll();
 			
-			if (nR < 0 || nC < 0 || nR >= 100 || nC >= 100 || visited[nR][nC] == t || map[nR][nC] == 1) continue;
-
-			if (map[nR][nC] == 3 || dfs(nR, nC, t) == 1) return 1;
+			for (int d = 0; d < 4; d++) {
+				int nR = cur.r + dr[d];
+	            int nC = cur.c + dc[d];
+	             
+	            if (nR < 0 || nC < 0 || nR >= 100 || nC >= 100 || visited[nR][nC] == t || map[nR][nC] == 1) continue;
+	            
+	            if (map[nR][nC] == 3) return 1;
+	            queue.add(new Point(nR, nC));
+	            visited[nR][nC] = t;
+			}
 		}
 		
 		return 0;
+	}
+	
+	static class Point {
+		int r;
+		int c;
+		
+		Point(int r, int c) {
+			this.r = r;
+			this.c = c;
+		}
 	}
 }
