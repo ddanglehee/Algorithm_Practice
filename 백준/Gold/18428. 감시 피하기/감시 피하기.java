@@ -5,7 +5,8 @@ class Main {
 
     static int N;
     static String[][] map;
-    static ArrayList<Location> teacherLocations = new  ArrayList<>();
+    static Location[] teacherLocations = new Location[36];
+    static int teacherCount = 0;
     static ArrayList<Location> candidateLocationList = new ArrayList<>();
     static Location[] selectedLocation = new Location[3];
     static int[] dr = {0, 1, 0, -1};
@@ -23,7 +24,7 @@ class Main {
             for (int c = 0; c < N; c++) {
                 map[r][c] = st.nextToken();
                 if (map[r][c].equals("T")) {
-                    teacherLocations.add(new Location(r, c));
+                    teacherLocations[teacherCount++] = new Location(r, c);
                 } else if (map[r][c].equals("X")) {
                     candidateLocationList.add(new Location(r, c));
                 }
@@ -59,8 +60,8 @@ class Main {
     }
 
     static boolean check() {
-        for (int t = 0; t < teacherLocations.size(); t++) {
-            Location teacherLocation = teacherLocations.get(t);
+        for (int t = 0; t < teacherCount; t++) {
+            Location teacherLocation = teacherLocations[t];
             int r = teacherLocation.r;
             int c = teacherLocation.c;
 
