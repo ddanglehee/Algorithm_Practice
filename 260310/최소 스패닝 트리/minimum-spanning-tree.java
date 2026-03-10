@@ -51,7 +51,7 @@ public class Main {
         if (parent[x] == x) {
             return x;
         }
-        return parent[x] = find(x);
+        return parent[x] = find(parent[x]);
     } 
 
     static class Edge implements Comparable<Edge> {
