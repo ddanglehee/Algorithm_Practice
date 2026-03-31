@@ -11,9 +11,11 @@ public class Main {
 
     static int bfs(int N) {
         Queue<int[]> queue = new ArrayDeque<>();
-        boolean[] visited = new boolean[2000000];
+        boolean[] visited = new boolean[3000000];
         visited[N] = true;
         queue.add(new int[] {N, 0});
+
+        if (N == 1) return 1;
 
         ArrayList<Integer> list = new ArrayList<>();
         while (!queue.isEmpty()) {
@@ -42,6 +44,7 @@ public class Main {
                 }
             }
         }
+
         return -1;
     }
 }
