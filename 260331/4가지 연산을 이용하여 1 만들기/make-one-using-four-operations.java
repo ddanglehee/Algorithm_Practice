@@ -15,7 +15,7 @@ public class Main {
         visited[N] = true;
         queue.add(new int[] {N, 0});
 
-        if (N == 1) return 1;
+        if (N == 1) return 0;
 
         ArrayList<Integer> list = new ArrayList<>();
         while (!queue.isEmpty()) {
