@@ -6,7 +6,7 @@ public class Main {
         long N = sc.nextLong();
         
         long s = 1;
-        long e = 1000000000;
+        long e = 15 * 1000000000;
         long answer = 0;
         while (s <= e) {
             long m = (s + e) / 2;
