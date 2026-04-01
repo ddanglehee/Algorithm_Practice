@@ -3,16 +3,16 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        int N = sc.nextInt();
+        long N = sc.nextLong();
         
-        int s = 1;
-        int e = 1000000000;
-        int answer = 0;
-        while (s < e) {
-            int m = (s + e) / 2;
+        long s = 1;
+        long e = 1000000000;
+        long answer = 0;
+        while (s <= e) {
+            long m = (s + e) / 2;
 
             // m 이 몇 번째로 적히는 숫자인가?
-            int n = m - (m / 3 + m / 5 - m / 15);
+            long n = m - (m / 3 + m / 5 - m / 15);
 
             if (n == N) {
                 answer = m;
